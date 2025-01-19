@@ -1,5 +1,8 @@
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
+app.use(cors());
 
 // Exemplo de conteúdo do musicas.json diretamente no código
 const musicas = [
@@ -7,24 +10,26 @@ const musicas = [
     "nome": "Aos Pés do Monte",
     "artista": "Tim e Vanessa",
     "categoria": "Espírita",
-    "cifra": [
-      {
-        "cifra": "Am                Dm",
-        "letra": "Um sentimento me ronda"
-      },
-      {
-        "cifra": "G                      C        E",
-        "letra": "Não sei dizer, tudo é novo pra mim"
-      },
-      {
-        "cifra": "Am               Dm",
-        "letra": "Meu coração se renova"
-      },
-      {
-        "cifra": "  G                   C          E",
-        "letra": "Sinto a esperança invadir o meu ser"
-      }
-    ]
+    "letra": `
+    Um sentimento me ronda
+    Não sei dizer, tudo é novo pra mim
+    Meu coração se renova
+    Sinto a esperança invadir o meu ser
+    Quero ser manso, ser limpo, ser justo
+    E pobre de espírito ser
+    
+    Tua palavra me sonda
+    Me conta do Reino que espera por mim
+    Eu te ofereço meu pranto
+    As dores da alma que quer renascer
+    
+    Eu ouvi tua voz
+    Teu falar me encantou
+    Quis seguir, caminhar
+    Quis saber pra onde vou
+    Eis-me aqui
+    Minha dor serenou.`,
+    "url": "https://www.cifraclub.com.br/tim-vanessa/aos-pes-do-monte/"
   }
 ];
 
