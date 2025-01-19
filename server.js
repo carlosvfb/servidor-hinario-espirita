@@ -4,32 +4,25 @@ const app = express();
 // Exemplo de conteúdo do musicas.json diretamente no código
 const musicas = [
   {
-    "nome": "Oração de São Francisco",
-    "artista": "Desconhecido",
+    "nome": "Aos Pés do Monte",
+    "artista": "Tim e Vanessa",
     "categoria": "Espírita",
     "cifra": [
       {
-        "linha": "C      G       Am     F",
-        "letra": "Senhor, fazei-me um instrumento de vossa paz"
+        "cifra": "Am                Dm",
+        "letra": "Um sentimento me ronda"
       },
       {
-        "linha": "F      Dm      G        C",
-        "letra": "Onde houver ódio, que eu leve o amor"
-      }
-    ]
-  },
-  {
-    "nome": "Canção do Amor",
-    "artista": "Outro Artista",
-    "categoria": "Espírita",
-    "cifra": [
-      {
-        "linha": "G      C       D      G",
-        "letra": "Onde houver amor, que eu leve a luz"
+        "cifra": "G                      C        E",
+        "letra": "Não sei dizer, tudo é novo pra mim"
       },
       {
-        "linha": "D      Em      C       G",
-        "letra": "Onde houver tristeza, que eu leve alegria"
+        "cifra": "Am               Dm",
+        "letra": "Meu coração se renova"
+      },
+      {
+        "cifra": "  G                   C          E",
+        "letra": "Sinto a esperança invadir o meu ser"
       }
     ]
   }
