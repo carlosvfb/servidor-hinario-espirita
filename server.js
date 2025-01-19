@@ -1,48 +1,58 @@
 const express = require('express');
-const fs = require('fs');
 const app = express();
 
-// Função para ler o arquivo de músicas e retornar os dados
-const lerMusicas = () => {
-  return new Promise((resolve, reject) => {
-    fs.readFile('musicas.json', 'utf8', (err, data) => {
-      if (err) {
-        reject('Erro ao ler o arquivo');
-      } else {
-        resolve(JSON.parse(data));
+// Exemplo de conteúdo do musicas.json diretamente no código
+const musicas = [
+  {
+    "nome": "Oração de São Francisco",
+    "artista": "Desconhecido",
+    "categoria": "Espírita",
+    "cifra": [
+      {
+        "linha": "C      G       Am     F",
+        "letra": "Senhor, fazei-me um instrumento de vossa paz"
+      },
+      {
+        "linha": "F      Dm      G        C",
+        "letra": "Onde houver ódio, que eu leve o amor"
       }
-    });
-  });
-};
+    ]
+  },
+  {
+    "nome": "Canção do Amor",
+    "artista": "Outro Artista",
+    "categoria": "Espírita",
+    "cifra": [
+      {
+        "linha": "G      C       D      G",
+        "letra": "Onde houver amor, que eu leve a luz"
+      },
+      {
+        "linha": "D      Em      C       G",
+        "letra": "Onde houver tristeza, que eu leve alegria"
+      }
+    ]
+  }
+];
 
 // Rota para listar todas as músicas
-app.get('/musicas', async (req, res) => {
-  try {
-    const musicas = await lerMusicas();
-    res.json(musicas);
-  } catch (err) {
-    res.status(500).send(err);
-  }
+app.get('/musicas', (req, res) => {
+  res.json(musicas);
 });
 
 // Rota para buscar uma música específica pelo nome
-app.get('/musicas/:nome', async (req, res) => {
-  try {
-    const nomeMusica = req.params.nome.toLowerCase();
-    const musicas = await lerMusicas();
-    const musica = musicas.find(m => m.nome.toLowerCase() === nomeMusica);
+app.get('/musicas/:nome', (req, res) => {
+  const nomeMusica = req.params.nome.toLowerCase();
+  const musica = musicas.find(m => m.nome.toLowerCase() === nomeMusica);
 
-    if (musica) {
-      res.json(musica);
-    } else {
-      res.status(404).send('Música não encontrada');
-    }
-  } catch (err) {
-    res.status(500).send(err);
+  if (musica) {
+    res.json(musica);
+  } else {
+    res.status(404).send('Música não encontrada');
   }
 });
 
-// Iniciar o servidor na porta 3000
+// Iniciar o servidor na porta 3002
 app.listen(3002, () => {
   console.log('API rodando na porta 3002');
 });
