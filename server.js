@@ -30,7 +30,7 @@ const musicas = [
     Quis saber pra onde vou
     Eis-me aqui
     Minha dor serenou.`,
-    "url": "https://www.cifraclub.com.br/tim-vanessa/aos-pes-do-monte/",
+    "url": "https://www.cifraclub.com.br/tim-vanessa/aos-pes-do-monte/#tabs=false",
     "urlQrCode": "https://www.cifraclub.com.br/tim-vanessa/aos-pes-do-monte/"
   }
 ];
