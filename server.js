@@ -1,49 +1,27 @@
 const express = require('express');
 const cors = require('cors');
 const QRCode = require('qrcode');
+const { PrismaClient } = require('@prisma/client');
 
+const prisma = new PrismaClient();
 const app = express();
-app.use(cors());
 
-// Exemplo de conteúdo do musicas.json diretamente no código
-const musicas = [
-  {
-    "nome": "Aos Pés do Monte",
-    "artista": "Tim e Vanessa",
-    "categoria": "Espírita",
-    "letra": `
-    Um sentimento me ronda
-    Não sei dizer, tudo é novo pra mim
-    Meu coração se renova
-    Sinto a esperança invadir o meu ser
-    Quero ser manso, ser limpo, ser justo
-    E pobre de espírito ser
-    
-    Tua palavra me sonda
-    Me conta do Reino que espera por mim
-    Eu te ofereço meu pranto
-    As dores da alma que quer renascer
-    
-    Eu ouvi tua voz
-    Teu falar me encantou
-    Quis seguir, caminhar
-    Quis saber pra onde vou
-    Eis-me aqui
-    Minha dor serenou.`,
-    "url": "https://www.cifraclub.com.br/tim-vanessa/aos-pes-do-monte/#tabs=false",
-    "urlQrCode": "https://www.cifraclub.com.br/tim-vanessa/aos-pes-do-monte/"
-  }
-];
+app.use(cors());
+app.use(express.json());
 
 // Rota para listar todas as músicas
-app.get('/musicas', (req, res) => {
+app.get('/musicas', async (req, res) => {
+  const musicas = await prisma.musica.findMany();
   res.json(musicas);
 });
 
-// Rota para buscar uma música específica pelo nome
-app.get('/musicas/:nome', (req, res) => {
+// Rota para buscar uma música por nome
+app.get('/musicas/:nome', async (req, res) => {
   const nomeMusica = req.params.nome.toLowerCase();
-  const musica = musicas.find(m => m.nome.toLowerCase() === nomeMusica);
+
+  const musica = await prisma.musica.findFirst({
+    where: { nome: { equals: nomeMusica, mode: 'insensitive' } }
+  });
 
   if (musica) {
     res.json(musica);
@@ -52,13 +30,17 @@ app.get('/musicas/:nome', (req, res) => {
   }
 });
 
+// Rota para gerar QR Code da música
 app.get('/musicas/:nome/qrcode', async (req, res) => {
   const nomeMusica = req.params.nome.toLowerCase();
-  const musica = musicas.find(m => m.nome.toLowerCase() === nomeMusica);
+
+  const musica = await prisma.musica.findFirst({
+    where: { nome: { equals: nomeMusica, mode: 'insensitive' } }
+  });
 
   if (musica) {
     try {
-      const qrCodeDataUrl = await QRCode.toDataURL(musica.urlQrCode); // Link da música no site
+      const qrCodeDataUrl = await QRCode.toDataURL(musica.urlQrCode);
       res.json({ nome: musica.nome, qrCode: qrCodeDataUrl });
     } catch (error) {
       console.error('Erro ao gerar QR Code:', error);
@@ -69,7 +51,22 @@ app.get('/musicas/:nome/qrcode', async (req, res) => {
   }
 });
 
-// Iniciar o servidor na porta 3002
+// Rota para adicionar uma nova música
+app.post('/musicas', async (req, res) => {
+  const { nome, artista, categoria, letra, cifra, url, urlQrCode } = req.body;
+
+  try {
+    const musica = await prisma.musica.create({
+      data: { nome, artista, categoria, letra, cifra, url, urlQrCode }
+    });
+    res.status(201).json(musica);
+  } catch (error) {
+    console.error('Erro ao adicionar música:', error);
+    res.status(400).send('Erro ao adicionar música');
+  }
+});
+
+// Iniciar o servidor
 app.listen(3002, () => {
   console.log('API rodando na porta 3002');
 });
