@@ -53,11 +53,11 @@ app.get('/musicas/:nome/qrcode', async (req, res) => {
 
 // Rota para adicionar uma nova música
 app.post('/musicas', async (req, res) => {
-  const { nome, artista, categoria, letra, cifra, url, urlQrCode } = req.body;
+  const { nome, artista, categoria, letra, cifra, cifraSimplificada, urlQrCode } = req.body;
 
   try {
     const musica = await prisma.musica.create({
-      data: { nome, artista, categoria, letra, cifra, url, urlQrCode }
+      data: { nome, artista, categoria, letra, cifra, cifraSimplificada, urlQrCode }
     });
     res.status(201).json(musica);
   } catch (error) {

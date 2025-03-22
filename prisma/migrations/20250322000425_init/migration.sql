@@ -6,7 +6,7 @@ CREATE TABLE "Musica" (
     "categoria" TEXT NOT NULL,
     "letra" TEXT NOT NULL,
     "cifra" TEXT NOT NULL,
-    "url" TEXT NOT NULL,
+    "cifraSimplificada" TEXT NOT NULL,
     "urlQrCode" TEXT NOT NULL,
 
     CONSTRAINT "Musica_pkey" PRIMARY KEY ("id")
