@@ -49,31 +49,28 @@ app.get('/musicas/:nome/qrcode', async (req, res) => {
 });
 
 app.put('/musicas/:id', async (req, res) => {
-  const { id } = req.params;  // Agora vamos usar o id
+  const { id } = req.params;
   const { nome, artista, categoria, letra, cifra, cifraSimplificada, urlQrCode } = req.body;
 
   try {
-    // Verifica se a música existe pelo id
     const musicaExistente = await prisma.musica.findUnique({
-      where: { id: Number(id) }  // Busca pela chave `id`
+      where: { id: Number(id) }
     });
 
     if (!musicaExistente) {
       return res.status(404).json({ error: 'Música não encontrada' });
     }
 
-    // Verifica se já existe uma música com o mesmo nome e artista, mas que não seja a música atual
     const musicaComMesmoNomeEArtista = await prisma.musica.findFirst({
-      where: { nome: nome, artista: artista, NOT: { id: Number(id) } }  // Verifica se não é a mesma música
+      where: { nome: nome, artista: artista, NOT: { id: Number(id) } }
     });
 
     if (musicaComMesmoNomeEArtista) {
       return res.status(400).json({ error: 'Já existe uma música com esse nome e artista.' });
     }
 
-    // Atualiza a música com os novos dados
     const musicaAtualizada = await prisma.musica.update({
-      where: { id: Number(id) },  // Atualiza a música pelo id
+      where: { id: Number(id) },
       data: { nome, artista, categoria, letra, cifra, cifraSimplificada, urlQrCode }
     });
 
