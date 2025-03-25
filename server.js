@@ -28,17 +28,21 @@ app.get('/musicas/:nome', async (req, res) => {
   }
 });
 
-app.get('/musicas/:nome/qrcode', async (req, res) => {
+app.get('/musicas/:nome/:artista/qrcode', async (req, res) => {
   const nomeMusica = req.params.nome.toLowerCase();
+  const artista = req.params.artista.toLowerCase();
 
   const musica = await prisma.musica.findFirst({
-    where: { nome: { equals: nomeMusica, mode: 'insensitive' } }
+    where: { 
+      nome: { equals: nomeMusica, mode: 'insensitive' },
+      artista: { equals: artista, mode: 'insensitive' }
+    }
   });
 
   if (musica) {
     try {
       const qrCodeDataUrl = await QRCode.toDataURL(musica.urlQrCode);
-      res.json({ nome: musica.nome, qrCode: qrCodeDataUrl });
+      res.json({ nome: musica.nome, artista: musica.artista, qrCode: qrCodeDataUrl });
     } catch (error) {
       console.error('Erro ao gerar QR Code:', error);
       res.status(500).send('Erro ao gerar QR Code');
@@ -47,6 +51,7 @@ app.get('/musicas/:nome/qrcode', async (req, res) => {
     res.status(404).send('Música não encontrada');
   }
 });
+
 
 app.put('/musicas/:id', async (req, res) => {
   const { id } = req.params;
